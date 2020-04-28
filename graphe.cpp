@@ -192,13 +192,13 @@ std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKS
     return preds;
 }
 
-
 /*
 sous-programme qui affiche une arborescence
 params : sommet initial (racine), vecteur de prédécesseur
 */
 int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
 {
+    int nbchemin=0;
     int somme=0;
     std::cout<<"parcours"<<std::endl;
     if(arbre[num2]!=-1)
@@ -210,14 +210,15 @@ int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& 
         {
             std::cout<<j<<" <-- ";
             j=arbre[j];
+            nbchemin=nbchemin+1;
         }
         std::cout<<j<<std::endl;
 
         size_t a=num2;
 
-
         while(a!=num1)
         {
+
             for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
             {
                 if(succ.first->getID()==a)
@@ -228,10 +229,10 @@ int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& 
             }
             a=arbre[a];
         }
+        m_nbchemin.push_back(nbchemin);
         std::cout << "somme : " << somme<<std::endl;
-
     }
-
+    std::cout<<"nb chemin : "<<nbchemin<<std::endl;
     return somme;
 }
 
@@ -281,6 +282,7 @@ std::vector<int> Graphe::BFS(int num_s0)const
 
 int Graphe::afficher_parcours1(size_t num,const std::vector<int>& arbre)
 {
+    int nbchemin;
     int somme=0;
     for(size_t i=0; i<arbre.size(); ++i)
     {
@@ -299,12 +301,17 @@ int Graphe::afficher_parcours1(size_t num,const std::vector<int>& arbre)
                 }
                 std::cout<<j<<std::endl;
             }
+
         }
+        nbchemin=nbchemin+1;
     }
+    std::cout<<"nb : "<<nbchemin<<std::endl;
+    m_nbchemin.push_back(nbchemin);
+
     return somme;
 }
 
-std::vector<float>Graphe::proximite(std::string choix2, Graphe g)
+void Graphe::proximite(std::string choix2, Graphe g)
 {
     std::vector<float> resultat;
     double id1,id2;
@@ -336,7 +343,6 @@ std::vector<float>Graphe::proximite(std::string choix2, Graphe g)
                 total= total+g.afficher_parcours(id1,id2,arbre);
             }
             std::cout  << "Total :"<<total<< std::endl;
-            total=3/total;
             resultat.push_back(total);
         }
     }
@@ -351,12 +357,16 @@ std::vector<float>Graphe::proximite(std::string choix2, Graphe g)
             ///affichage des chemins obtenus
             std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
             total=total+g.afficher_parcours1(id1,arbre_BFS);
-
             std::cout  << "Total : "<<total<< std::endl;
-            total=3/total;
             resultat.push_back(total);
             total=0;
         }
     }
-    return resultat;
+
+    for(size_t i=0; i<resultat.size(); ++i )
+    {
+        std::cout <<"Indice normalise "<<i<<":"<<3/resultat[i]<<std::endl;
+        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/g.m_nbchemin[i]<<std::endl;
+    }
+
 }

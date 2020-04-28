@@ -95,13 +95,9 @@ void menu()             //menu
 
         case 3:
         {
-            std::vector<float> resultat;
             std::cout <<"Centralité proximite:"<< std::endl;
-            resultat= g.proximite(choix2,g);
-            for(size_t i=0;i<resultat.size();++i )
-            {
-                std::cout <<"Indice "<<i<<":"<<resultat[i]<<std::endl;
-            }
+            g.proximite(choix2,g);
+
         }
         break;
 
