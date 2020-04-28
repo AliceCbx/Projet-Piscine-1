@@ -32,25 +32,26 @@ void menu()             //menu
         }
 
         if((nom == "vide")&&(nom2 == "vide"))                    //vérification chargement de fichiers
-           {
-                std::cout << "Il n'y a pas de graphe deja charge\n"
-                            "Veuillez en charger un avant toutes actions\n\n"
-                            "Veuillez choisir le nom du fichier (topologie) en .txt " << std::endl;
+        {
+            std::cout << "Il n'y a pas de graphe deja charge\n"
+                      "Veuillez en charger un avant toutes actions\n\n"
+                      "Veuillez choisir le nom du fichier (topologie) en .txt " << std::endl;
 
-                std::cin >> nom;
-                Graphe g{nom,nom2};             //ouverture du fichier
-           }
+            std::cin >> nom;
+        }
 
-Svgfile svgout;
+Graphe g{nom,nom2};         //ouverture du fichier
+
+        Svgfile svgout;
 
         switch(choix1)
         {
         case 1:                         //choix 1 : chargement d'une pondération
         {
-            std::cout << "Voulez-vous ouvrir un fichier de ponderation (OUI/NON) ?\n";
+            std::cout << "Voulez-vous ouvrir un nouveau fichier (OUI_G/OUI_P/NON) ?\n";
             std::cin >> choix2;
 
-            while((choix2 != "OUI")&&(choix2 != "NON"))
+            while((choix2 != "OUI_P")&&(choix2 != "NON")&&(choix2 != "OUI_G"))
             {
                 std::cout << "Ne correspond pas a un choix possible\n"
                           "Veuillez ressaisir votre choix" << std::endl;
@@ -58,7 +59,14 @@ Svgfile svgout;
                 std::cin >> choix2;
             }
 
-            if(choix2 == "OUI")
+            if(choix2 == "OUI_G")
+            {
+                std::cout << "Vous souhaitez charger un graphe\n"
+                          "Veuillez choisir le nom du fichier (topologie) en .txt" << std::endl;
+                std::cin >> nom;
+            }
+
+            if(choix2 == "OUI_P")
             {
                 std::cout << "Vous souhaitez charger une ponderation\n"
                           "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
@@ -74,20 +82,34 @@ Svgfile svgout;
         break;
 
         case 2:
-              {
-                std::cout << "Vous souhaitez charger une nouvelle ponderation\n"
-                          "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
+        {
+            std::cout << "Vous souhaitez charger une nouvelle ponderation\n"
+                      "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
 
-                std::cin >> nom2;
+            std::cin >> nom2;
 
-                Graphe p{nom,nom2};
-                p.afficherGrapheSvg(&svgout);
-              }
-            break;
+            Graphe p{nom,nom2};
+            p.afficherGrapheSvg(&svgout);
+        }
+        break;
 
         case 3:
-            std::cout << "3_OK" << std::endl;
-            break;
+        {
+            double id1,id2;
+            std::cout << std::endl << "PCC avec dji:";
+            std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de départ
+            std::cin >> id1;
+            std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arrivée
+            std::cin >> id2;
+            std::vector<int> arbre = g.rechercheDijkstra(id1);
+            g.afficher_parcours(id1,id2,arbre);
+
+            std::cout << std::endl << "PCC avec BFS";
+            ///affichage du plus court chemin
+            std::cout << std::endl << "parcours a partir du sommet " << id1 << " jusqu'au sommet " << id2 << std::endl;
+            g.afficher_parcours(id1,id2,arbre);
+        }
+        break;
 
         case 4:
             std::cout << "4_OK" << std::endl;
