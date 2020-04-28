@@ -40,7 +40,7 @@ void menu()             //menu
             std::cin >> nom;
         }
 
-Graphe g{nom,nom2};         //ouverture du fichier
+        Graphe g{nom,nom2};         //ouverture du fichier
 
         Svgfile svgout;
 
@@ -95,34 +95,29 @@ Graphe g{nom,nom2};         //ouverture du fichier
 
         case 3:
         {
-            double id1,id2;
-            std::cout << std::endl << "PCC avec dji:";
-            std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de départ
-            std::cin >> id1;
-            std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arrivée
-            std::cin >> id2;
-            std::vector<int> arbre = g.rechercheDijkstra(id1);
-            g.afficher_parcours(id1,id2,arbre);
-
-            std::cout << std::endl << "PCC avec BFS";
-            ///affichage du plus court chemin
-            std::cout << std::endl << "parcours a partir du sommet " << id1 << " jusqu'au sommet " << id2 << std::endl;
-            g.afficher_parcours(id1,id2,arbre);
+            std::vector<float> resultat;
+            std::cout <<"Centralité proximite:"<< std::endl;
+            resultat= g.proximite(choix2,g);
+            for(size_t i=0;i<resultat.size();++i )
+            {
+                std::cout <<"Indice "<<i<<":"<<resultat[i]<<std::endl;
+            }
         }
         break;
 
-        case 4:
-            std::cout << "4_OK" << std::endl;
-            break;
+    case 4:
+        std::cout << "4_OK" << std::endl;
+        break;
 
-        case 5:
-            fin = 1;
-            break;
+    case 5:
+        fin = 1;
+        break;
 
-        }
     }
-    while(fin != 1);
 }
+while(fin != 1);
+}
+
 
 
 int main()

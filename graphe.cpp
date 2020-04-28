@@ -79,12 +79,12 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
 
             m_aretes.push_back( new Arete(idT,num1,num2,poids) );
 
-                    m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
+            m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
 
-                    ///si le graphe n'est pas orienté
-                    ///si num2 est successeur de num1, num1 est successeur de num2
-                    if(!m_orient)
-                        m_sommets[num2]->ajouterSucc(std::make_pair(m_sommets[num1],poids));
+            ///si le graphe n'est pas orienté
+            ///si num2 est successeur de num1, num1 est successeur de num2
+            if(!m_orient)
+                m_sommets[num2]->ajouterSucc(std::make_pair(m_sommets[num1],poids));
         }
     }
 }
@@ -120,18 +120,18 @@ void Graphe::afficherGrapheSvg(Svgfile* svgout) const           //affichage du g
         m_sommets[i]->afficherSommetSvg(svgout);
     }
 
-double x1,x2,y1,y2;
+    double x1,x2,y1,y2;
 
     for(size_t i=0; i<m_aretes.size(); ++i)
     {
-                x1 = m_sommets[m_aretes[i]->get_Num1()]->getX();
-                y1 = m_sommets[m_aretes[i]->get_Num1()]->getY();
+        x1 = m_sommets[m_aretes[i]->get_Num1()]->getX();
+        y1 = m_sommets[m_aretes[i]->get_Num1()]->getY();
 
-                x2 = m_sommets[m_aretes[i]->get_Num2()]->getX();
-                y2 = m_sommets[m_aretes[i]->get_Num2()]->getY();
+        x2 = m_sommets[m_aretes[i]->get_Num2()]->getX();
+        y2 = m_sommets[m_aretes[i]->get_Num2()]->getY();
 
         svgout->addLine(x1*100,y1*100,x2*100,y2*100,"black");
-        svgout->addText( ((x1*100)+(x2*100))/2 , ((y1*100)+(y2*100))/2 , m_aretes[i]->get_Poids() , "purple");
+        svgout->addText( ((x1*100)+(x2*100))/2, ((y1*100)+(y2*100))/2, m_aretes[i]->get_Poids(), "purple");
     }
 }
 
@@ -197,9 +197,10 @@ std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKS
 sous-programme qui affiche une arborescence
 params : sommet initial (racine), vecteur de prédécesseur
 */
-void Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
+int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
 {
-
+    int somme=0;
+    std::cout<<"parcours"<<std::endl;
     if(arbre[num2]!=-1)
     {
         std::cout<<num2<<" <-- ";
@@ -213,7 +214,7 @@ void Graphe::afficher_parcours(double num1, double num2, const std::vector<int>&
         std::cout<<j<<std::endl;
 
         size_t a=num2;
-        int somme=0;
+
 
         while(a!=num1)
         {
@@ -227,8 +228,11 @@ void Graphe::afficher_parcours(double num1, double num2, const std::vector<int>&
             }
             a=arbre[a];
         }
-        std::cout << "somme : " << somme;
+        std::cout << "somme : " << somme<<std::endl;
+
     }
+
+    return somme;
 }
 
 /*
@@ -273,4 +277,86 @@ std::vector<int> Graphe::BFS(int num_s0)const
         }
     }
     return preds;
+}
+
+int Graphe::afficher_parcours1(size_t num,const std::vector<int>& arbre)
+{
+    int somme=0;
+    for(size_t i=0; i<arbre.size(); ++i)
+    {
+        if(i!=num)
+        {
+            if(arbre[i]!=-1)
+            {
+                std::cout<<i<<" <-- ";
+                size_t j=arbre[i];
+                somme=somme+1;
+                while(j!=num)
+                {
+                    std::cout<<j<<" <-- ";
+                    j=arbre[j];
+                    somme=somme+1;
+                }
+                std::cout<<j<<std::endl;
+            }
+        }
+    }
+    return somme;
+}
+
+std::vector<float>Graphe::proximite(std::string choix2, Graphe g)
+{
+    std::vector<float> resultat;
+    double id1,id2;
+    float total=0;
+    double test=0;
+
+    //Tri degré
+    //trouver degre plus eleve
+
+    for(id1=0; id1<m_sommets.size(); ++id1)
+    {
+        if(test<m_sommets[id1]->getID())
+        {
+            test=m_sommets[id1]->getID();
+        }
+    }
+    std::cout << std::endl << "Degre le plus eleve : "<< test<< std::endl;
+
+    //double boucle pour avoir la somme des longueurs des pcc passant de id1 à tous les autres sommets
+    if (choix2 == "OUI_P")
+    {
+        for(id1=0; id1<m_sommets.size() ; ++id1)
+        {
+            total=0;
+            for(id2=0; id2<m_sommets.size(); ++id2)
+            {
+                std::cout << std::endl << "PCC avec dji:"<< std::endl;
+                std::vector<int> arbre = g.rechercheDijkstra(id1);
+                total= total+g.afficher_parcours(id1,id2,arbre);
+            }
+            std::cout  << "Total :"<<total<< std::endl;
+            total=3/total;
+            resultat.push_back(total);
+        }
+    }
+    else
+    {
+        for(id1=0; id1<m_sommets.size() ; ++id1)
+        {
+            ///affichage du plus court chemin
+            std::cout << std::endl << "PCC avec BFS";
+            ///appel de la méthode BFS et récupération du résultat
+            std::vector<int> arbre_BFS = g.BFS(id1);
+            ///affichage des chemins obtenus
+            std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
+            total=total+g.afficher_parcours1(id1,arbre_BFS);
+
+            std::cout  << "Total : "<<total<< std::endl;
+            total=3/total;
+            resultat.push_back(total);
+            total=0;
+        }
+    }
+    return resultat;
 }

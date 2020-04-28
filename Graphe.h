@@ -20,13 +20,16 @@ public:
 
     void afficher() const;
     void afficherGrapheSvg(Svgfile* svgout) const;
+    int afficher_parcours1(size_t num,const std::vector<int>& arbre);
 
     //proximité
     std::vector <int> rechercheDijkstra (double num_F);
-    void afficher_parcours(double num1, double num2, const std::vector<int>& arbre);
+    std::vector<float>proximite(std::string choix2,Graphe g);
+    int afficher_parcours(double num1, double num2, const std::vector<int>& arbre);
 
     //Bfs
     std::vector<int> BFS(int num_s0)const;
+
 };
 
 
