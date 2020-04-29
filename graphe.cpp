@@ -356,10 +356,9 @@ void Graphe::proximite(std::string choix2, Graphe g)
         for(id1=0; id1<m_sommets.size() ; ++id1)
         {
 
-///appel de la méthode BFS et récupération du résultat
+            ///appel de la méthode BFS et récupération du résultat
             std::vector<int> arbre_BFS = g.BFS(id1);
-///affichage des chemins obtenus
-            std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
+            ///affichage des chemins obtenus
             total=total+g.afficher_parcours1(id1,arbre_BFS);
             resultat.push_back(total);
             total=0;
@@ -425,8 +424,8 @@ void Graphe::calculCentraliteVP()
     int test = 0,compt=0;
     for(size_t i=0; i<m_sommets.size(); ++i)
     {
-        m_sommets[i]->set_idC( idC = 1 ); //on attribue pour chaque sommet l'indice 1 indice
-        V.push_back(m_sommets[i]->get_idC());
+        m_sommets[i]->set_idC( idC = 1 ); //on attribue pour chaque sommet l'indice 1
+        indiceV.push_back(m_sommets[i]->get_idC());
     }
     do
     {
