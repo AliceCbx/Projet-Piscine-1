@@ -96,11 +96,11 @@ void menu()             //menu
         case 3:
         {
             std::cout <<"Centralité degre:"<< std::endl;
-            //g.calculCentraliteDegre();
+            g.calculCentraliteDegre();
             g.sauvegarde();
 
             std::cout <<"Centralité VP:"<< std::endl;
-            //g.calculCentraliteVP();
+            g.calculCentraliteVP();
             g.sauvegarde();
 
             std::cout <<"Centralité proximite:"<< std::endl;

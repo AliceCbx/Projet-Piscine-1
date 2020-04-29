@@ -136,6 +136,44 @@ void Graphe::afficherGrapheSvg(Svgfile* svgout) const           //affichage du g
     }
 }
 
+/*
+sous-programme qui affiche une arborescence
+params : sommet initial (racine), vecteur de prédécesseur
+*/
+int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
+{
+    int somme=0;
+    if(arbre[num2]!=-1)
+    {
+        //std::cout<<num2<<" <-- ";
+        size_t j=arbre[num2];
+
+        while(j!=num1)
+        {
+            //std::cout<<j<<" <-- ";
+            j=arbre[j];
+        }
+        //std::cout<<j<<std::endl;
+
+        size_t a=num2;
+
+        while(a!=num1)
+        {
+
+            for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
+            {
+                if(succ.first->getID()==a)
+                {
+                    //std::cout << succ.second << " + ";
+                    somme = somme + succ.second;
+                }
+            }
+            a=arbre[a];
+        }
+    }
+    return somme;
+}
+
 std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKSTRA
 {
 
@@ -192,44 +230,6 @@ std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKS
     }
 
     return preds;
-}
-
-/*
-sous-programme qui affiche une arborescence
-params : sommet initial (racine), vecteur de prédécesseur
-*/
-int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
-{
-    int somme=0;
-    if(arbre[num2]!=-1)
-    {
-        //std::cout<<num2<<" <-- ";
-        size_t j=arbre[num2];
-
-        while(j!=num1)
-        {
-            //std::cout<<j<<" <-- ";
-            j=arbre[j];
-        }
-        //std::cout<<j<<std::endl;
-
-        size_t a=num2;
-
-        while(a!=num1)
-        {
-
-            for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
-            {
-                if(succ.first->getID()==a)
-                {
-                    //std::cout << succ.second << " + ";
-                    somme = somme + succ.second;
-                }
-            }
-            a=arbre[a];
-        }
-    }
-    return somme;
 }
 
 /*
@@ -321,7 +321,7 @@ void Graphe::proximite(std::string choix2, Graphe g)
     {
         if(test<m_sommets[id1]->getID())
         {
-            test=m_sommets[id1]->getID();
+            test=m_sommets[id1]->getID(); // ca calcule vrmt le degré le plus élevé ?
         }
     }
     std::cout << std::endl << "Degre le plus eleve : "<< test<< std::endl;
@@ -334,7 +334,7 @@ void Graphe::proximite(std::string choix2, Graphe g)
         for(id1=0; id1<m_sommets.size() ; ++id1)
         {
             total=0;
-            //m_nb=0;
+
             for(id2=0; id2<m_sommets.size(); ++id2)
             {
 
@@ -355,29 +355,35 @@ void Graphe::proximite(std::string choix2, Graphe g)
     else
     {
         ///affichage du plus court chemin
-        std::cout << std::endl << "PCC avec BFS";
+        std::cout << std::endl << "PCC avec BFS ";
         for(id1=0; id1<m_sommets.size() ; ++id1)
         {
 
-            ///appel de la méthode BFS et récupération du résultat
-            std::vector<int> arbre_BFS = g.BFS(id1);
-            ///affichage des chemins obtenus
-            std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
-            total=total+g.afficher_parcours1(id1,arbre_BFS);
-            //std::cout  << "Total : "<<total<< std::endl;
-            //std::cout  << "m_nbchemin :"<<m_nbchemin[id1] << std::endl;
-            resultat.push_back(total);
-            total=0;
-        }
+///appel de la méthode BFS et récupération du résultat
+std::vector<int> arbre_BFS = g.BFS(id1);
+///affichage des chemins obtenus
+std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
+total=total+g.afficher_parcours1(id1,arbre_BFS);
+//std::cout  << "Total : "<<total<< std::endl;
+//std::cout  << "m_nbchemin :"<<m_nbchemin[id1] << std::endl;
+resultat.push_back(total);
+total=0;
+       }
     }
 
     for(size_t i=0; i<resultat.size(); ++i )
     {
-        std::cout <<"Indice normalise "<<i<<":"<<3/resultat[i]<<std::endl;
-        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/(m_sommets.size()-1) <<std::endl;
-        std::cout  << "POk 3"<< std::endl;
+
+    // somme totale des poids des chemins,
+    //le tout divisé par le nombre possible de chemin.
+    std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/(m_sommets.size()-1) <<std::endl;
+
+    //L'inverse du résultat multiplié par le nombre de chemin possible.
+    std::cout <<"Indice normalise "<<i<<":"<<(resultat.size()-1)/resultat[i]<<std::endl;
+    std::cout  << " " << std::endl;
     }
-    std::cout  << "ok 4"<< std::endl;
+
+   // std::cout  << "ok 4"<< std::endl;
 
 }
 
@@ -451,4 +457,5 @@ void Graphe::calculCentraliteVP()
     }
     while (lambda == 5);
 }
+
 
