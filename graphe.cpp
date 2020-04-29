@@ -76,7 +76,7 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
         }
         else
         {
-            double poids = 0;
+            double poids = 1;
 
             m_aretes.push_back( new Arete(idT,num1,num2,poids) );
 
@@ -140,31 +140,27 @@ void Graphe::afficherGrapheSvg(Svgfile* svgout) const           //affichage du g
 sous-programme qui affiche une arborescence
 params : sommet initial (racine), vecteur de prédécesseur
 */
-int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
+double Graphe::calculDistance(double num1, double num2, const std::vector<int>& arbre)
 {
     int somme=0;
+
     if(arbre[num2]!=-1)
     {
-        //std::cout<<num2<<" <-- ";
         size_t j=arbre[num2];
 
         while(j!=num1)
         {
-            //std::cout<<j<<" <-- ";
             j=arbre[j];
         }
-        //std::cout<<j<<std::endl;
 
         size_t a=num2;
 
         while(a!=num1)
         {
-
             for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
             {
                 if(succ.first->getID()==a)
                 {
-                    //std::cout << succ.second << " + ";
                     somme = somme + succ.second;
                 }
             }
@@ -228,7 +224,6 @@ std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKS
             }
         }
     }
-
     return preds;
 }
 
@@ -276,106 +271,6 @@ std::vector<int> Graphe::BFS(int num_s0)const
     return preds;
 }
 
-int Graphe::afficher_parcours1(size_t num,const std::vector<int>& arbre)
-{
-    int nbchemin;
-    int somme=0;
-    for(size_t i=0; i<arbre.size(); ++i)
-    {
-        if(i!=num)
-        {
-            if(arbre[i]!=-1)
-            {
-                //std::cout<<i<<" <-- ";
-                size_t j=arbre[i];
-                somme=somme+1;
-                while(j!=num)
-                {
-                    //std::cout<<j<<" <-- ";
-                    j=arbre[j];
-                    somme=somme+1;
-                }
-                //std::cout<<j<<std::endl;
-            }
-
-        }
-        nbchemin=nbchemin+1;
-    }
-    //std::cout<<"nb : "<<nbchemin<<std::endl;
-    //m_nbchemin.push_back(nbchemin);
-
-    return somme;
-}
-
-void Graphe::proximite(std::string choix2, Graphe g)
-{
-    std::vector<float> resultat;
-    double id1,id2;
-    float total=0;
-    double test=0;
-
-    //Tri degré
-    //trouver degre plus eleve
-
-    for(id1=0; id1<m_sommets.size(); ++id1)
-    {
-        if(test<m_sommets[id1]->getID())
-        {
-            test=m_sommets[id1]->getID(); // ca calcule vrmt le degré le plus élevé ?
-        }
-    }
-    std::cout << std::endl << "Degre le plus eleve : "<< test<< std::endl;
-
-    //double boucle pour avoir la somme des longueurs des pcc passant de id1 à tous les autres sommets
-    if (choix2 == "OUI_P")
-    {
-
-        std::cout << std::endl << "PCC avec dji:"<< std::endl;
-        for(id1=0; id1<m_sommets.size() ; ++id1)
-        {
-            total=0;
-
-            for(id2=0; id2<m_sommets.size(); ++id2)
-            {
-
-                std::vector<int> arbre = g.rechercheDijkstra(id1);
-                //if(id1!=id2)
-                // m_nb++;
-                total= total+g.afficher_parcours(id1,id2,arbre);
-            }
-            //m_nbchemin.push_back(m_nb);
-            std::cout  << "Total :"<<total<< std::endl;
-            resultat.push_back(total);
-        }
-
-    }
-    else
-    {
-        ///affichage du plus court chemin
-        std::cout << std::endl << "PCC avec BFS ";
-        for(id1=0; id1<m_sommets.size() ; ++id1)
-        {
-
-///appel de la méthode BFS et récupération du résultat
-            std::vector<int> arbre_BFS = g.BFS(id1);
-///affichage des chemins obtenus
-            std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
-            total=total+g.afficher_parcours1(id1,arbre_BFS);
-            resultat.push_back(total);
-            total=0;
-        }
-    }
-    for(size_t i=0; i<resultat.size(); ++i )
-    {
-        // somme totale des poids des chemins,
-        //le tout divisé par le nombre possible de chemin.
-        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/(m_sommets.size()-1) <<std::endl;
-
-        //L'inverse du résultat multiplié par le nombre de chemin possible.
-        std::cout <<"Indice normalise "<<i<<":"<<(resultat.size()-1)/resultat[i]<<std::endl;
-        std::cout  << " " << std::endl;
-    }
-}
 
 void Graphe::sauvegarde()     const      //sauvegarde les indices dans un fichier texte
 {
@@ -390,6 +285,61 @@ void Graphe::sauvegarde()     const      //sauvegarde les indices dans un fichie
         for(const auto p : s->getIndices() )
         {
             ofs << " IndiceNN : " << p.first << " IndiceN : " << p.second << std::endl;
+        }
+    }
+}
+
+void Graphe::proximite(std::string choix2, Graphe g)
+{
+    double id1,id2;
+    double sommedist=0;
+    double indiceN,indiceNN;
+
+    //double boucle pour avoir la somme des longueurs des pcc passant de id1 à tous les autres sommets
+    if (choix2 == "OUI_P")
+    {
+        std::cout << std::endl << "PCC avec Dijkstra : "<< std::endl;
+
+        for(id1=0; id1<m_sommets.size() ; ++id1)
+        {
+            sommedist=0;
+            std::vector<int> arbre = g.rechercheDijkstra(id1);      //recherche pcc à partir du sommet id1
+
+            for(id2=0; id2<m_sommets.size(); ++id2)                 //pour tous les autres sommets
+            {
+                if(id1 != id2)
+                {
+                    sommedist = sommedist + g.calculDistance(id1,id2,arbre);        //calcul de la longueur entre le sommet id1 et id2
+                }
+            }
+
+            indiceN = (m_sommets.size() - 1)/sommedist;             //indice normalisé
+            indiceNN = 1/sommedist;                                 //indice non normalisé
+
+            m_sommets[id1]->ajouterIndice(std::make_pair(indiceNN,indiceN));
+        }
+    }
+    else
+    {
+        std::cout << std::endl << "PCC avec BFS : "<< std::endl;
+
+        for(id1=0; id1<m_sommets.size() ; ++id1)
+        {
+            sommedist=0;
+            std::vector<int> arbre = g.BFS(id1);      //recherche pcc à partir du sommet id1
+
+            for(id2=0; id2<m_sommets.size(); ++id2)                 //pour tous les autres sommets
+            {
+                if(id1 != id2)
+                {
+                    sommedist = sommedist + g.calculDistance(id1,id2,arbre);        //calcul de la longueur entre le sommet id1 et id2
+                }
+            }
+
+            indiceN = (m_sommets.size() - 1)/sommedist;             //indice normalisé
+            indiceNN = 1/sommedist;                                 //indice non normalisé
+
+            m_sommets[id1]->ajouterIndice(std::make_pair(indiceNN,indiceN));
         }
     }
 }
@@ -423,37 +373,43 @@ void Graphe::calculCentraliteVP()
     std::vector<double> indiceV;
     double lambda=0, sommeInd=0;
     int test = 0,compt=0;
+
+
     for(size_t i=0; i<m_sommets.size(); ++i)
     {
-        m_sommets[i]->set_idC( idC = 1 ); //on attribue pour chaque sommet l'indice 1 indice
-        V.push_back(m_sommets[i]->get_idC());
+        m_sommets[i]->set_idC( idC = 1 );               //on attribue pour chaque sommet l'indice 1
+        indiceV.push_back(m_sommets[i]->get_idC());
     }
+
     do
     {
-        for(auto it : m_sommets) //pour chaque sommet
+        for(auto it : m_sommets)                //pour chaque sommet
         {
-            for(auto iit : it->getSuccesseurs()) //pour chaque successeur de chaque sommet
+            for(auto iit : it->getSuccesseurs())         //pour chaque successeur de chaque sommet
             {
-                indiceV[compt] = indiceV[compt] + iit.first->get_idC() ; //on calcule l'indice des voisins
+                indiceV[compt] = indiceV[compt] +  iit.first->get_idC() ;             //on calcule l'indice des voisins
+
             }
             ++compt;
         }
+
         for(size_t i=0; i<indiceV.size(); ++i)
         {
-            sommeInd = sommeInd + (indiceV[i] * indiceV[i]); //on calcule lambda
+            sommeInd = sommeInd + (indiceV[i] * indiceV[i]);                    //on calcule lambda
         }
         lambda = sqrt(sommeInd);
-        for(size_t k=0; k<m_sommets.size(); ++k) //pour chaque sommet on recalcule l'indice
+
+        for(size_t k=0; k<m_sommets.size(); ++k)                //pour chaque sommet on recalcule l'indice
         {
             indiceNN = (indiceV[k] / lambda); //indice non normalisé
             m_sommets[k]->set_idC( idC = indiceNN);
-            indiceN = indiceNN *1; //indice normalisé
+
+            indiceN = indiceNN *1;             //indice normalisé
+
             m_sommets[k]->ajouterIndice(std::make_pair(indiceNN,indiceN));
         }
+
         test = abs(1 - lambda);
     }
-    while (test > lambda);   //on fait ça tant que lambda ne varie pas trop
+    while (test > lambda);           //on fait ça tant que lambda ne varie pas trop
 }
-
-
-

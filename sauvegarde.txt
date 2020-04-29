@@ -1,5 +1,5 @@
-Sommet : 0 IndiceNN : 1 IndiceN : 0.25
-Sommet : 1 IndiceNN : 1 IndiceN : 0.25
-Sommet : 2 IndiceNN : 4 IndiceN : 1
-Sommet : 3 IndiceNN : 1 IndiceN : 0.25
-Sommet : 4 IndiceNN : 1 IndiceN : 0.25
+Sommet : 0 IndiceNN : 0.142857 IndiceN : 0.571429
+Sommet : 1 IndiceNN : 0.142857 IndiceN : 0.571429
+Sommet : 2 IndiceNN : 0.25 IndiceN : 1
+Sommet : 3 IndiceNN : 0.142857 IndiceN : 0.571429
+Sommet : 4 IndiceNN : 0.142857 IndiceN : 0.571429
