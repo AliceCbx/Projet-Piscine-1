@@ -37,6 +37,8 @@ public:
     void calculCentraliteDegre();
     //VP
     void calculCentraliteVP();
+    //inter
+    void intermediaire(Graphe g);
 
 };
 

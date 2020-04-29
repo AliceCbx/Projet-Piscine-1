@@ -8,7 +8,7 @@
 class Sommet
 {
 private:
-    double m_id,m_x,m_y,m_idC;
+    double m_id,m_x,m_y,m_idC,m_idI;
     std::string m_nom;
     std::vector<std::pair<const Sommet*,double>> m_successeurs;           //vecteur de successeurs
     std::vector<std::pair<double,double>> m_indices;
@@ -42,6 +42,16 @@ public:
     void set_idC(double idC)
     {
         m_idC=idC;
+    }
+
+             double get_idI() const
+    {
+        return m_idI;
+    }
+
+    void set_idI(double idI)
+    {
+        m_idI=idI;
     }
 
     ///accesseur : pour la liste des successeurs

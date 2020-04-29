@@ -5,6 +5,7 @@
 #include <string>
 #include <queue>
 #include <cmath>
+#include <map>
 
 Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)              //constructeur
 {
@@ -315,8 +316,8 @@ void Graphe::proximite(std::string choix2, Graphe g)
 
             indiceN = (m_sommets.size() - 1)/sommedist;             //indice normalisé
             indiceNN = 1/sommedist;                                 //indice non normalisé
-
             m_sommets[id1]->ajouterIndice(std::make_pair(indiceNN,indiceN));
+
         }
     }
     else
@@ -377,7 +378,6 @@ void Graphe::calculCentraliteVP()
 
     for(size_t i=0; i<m_sommets.size(); ++i)
     {
-        m_sommets[i]->set_idC( idC = 1 );               //on attribue pour chaque sommet l'indice 1
         indiceV.push_back(m_sommets[i]->get_idC());
     }
 
@@ -412,4 +412,30 @@ void Graphe::calculCentraliteVP()
         test = abs(1 - lambda);
     }
     while (test > lambda);           //on fait ça tant que lambda ne varie pas trop
+}
+
+//centralite intermediaire
+
+void Graphe::intermediaire(Graphe g)
+{
+    int sigst=0; //nombre de PCC entre point s et t
+    int sigv=0;  //nombre de PCC entre point s et t passant par v
+    std::map< std::vector<int> , double > pcc;
+    std::vector<int> recup; //recuperer predecesseur
+    int idI;
+
+    ///Mettre tous les indices à 0
+    for(size_t i=0; i<m_sommets.size(); ++i)
+    {
+        m_sommets[i]->set_idI(idI=0);
+    }
+
+    std::cout << std::endl << "PCC avec BFS ";
+
+    for(size_t i=0; i<m_sommets.size() ; ++i)
+    {
+        ///appel de la méthode BFS et récupération du résultat
+        recup=g.BFS(i);
+        pcc.insert({recup, i});
+    }
 }
