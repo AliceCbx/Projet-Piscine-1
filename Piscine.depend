@@ -1,165 +1,4 @@
 # depslib dependency file v1.0
-1587983000 source:c:\users\grego\documents\github\projet-piscine\piscine\sommet.cpp
-	"Sommet.h"
-	<vector>
-	<iostream>
-	<fstream>
-
-1587983000 c:\users\grego\documents\github\projet-piscine\piscine\sommet.h
-	<vector>
-	<fstream>
-
-1587983623 source:c:\users\grego\documents\github\projet-piscine\piscine\arete.cpp
-	"Arete.h"
-	<fstream>
-	<iostream>
-
-1587983052 c:\users\grego\documents\github\projet-piscine\piscine\arete.h
-	<fstream>
-
-1588059733 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\arete.cpp
-	"Arete.h"
-	<fstream>
-	<iostream>
-
-1588062460 c:\users\grego\documents\github\projet-piscine-2020\piscine\arete.h
-	<fstream>
-	"svgfile.h"
-
-1588062981 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\graphe.cpp
-	"Graphe.h"
-	<iostream>
-	<fstream>
-	<vector>
-	<string>
-
-1588059733 c:\users\grego\documents\github\projet-piscine-2020\piscine\graphe.h
-	<vector>
-	"Sommet.h"
-	"Arete.h"
-	"svgfile.h"
-
-1588059733 c:\users\grego\documents\github\projet-piscine-2020\piscine\sommet.h
-	<vector>
-	<fstream>
-	"svgfile.h"
-
-1588061842 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\sommet.cpp
-	"Sommet.h"
-	<vector>
-	<iostream>
-	<fstream>
-
-1588063028 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\main.cpp
-	<iostream>
-	"Graphe.h"
-	"Svgfile.h"
-	<string>
-
-1587999055 c:\users\grego\documents\github\projet-piscine-2020\piscine\svgfile.h
-	<string>
-	<fstream>
-	<set>
-
-1587999055 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\svgfile.cpp
-	"svgfile.h"
-	<iostream>
-	<sstream>
-
-1588063833 source:c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\arete.cpp
-	"Arete.h"
-	<fstream>
-	<iostream>
-
-1588063833 c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\arete.h
-	<fstream>
-	"svgfile.h"
-
-1588063814 c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\svgfile.h
-	<string>
-	<fstream>
-	<set>
-
-1588063833 source:c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\sommet.cpp
-	"Sommet.h"
-	<vector>
-	<iostream>
-	<fstream>
-
-1588063833 c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\sommet.h
-	<vector>
-	<fstream>
-	"svgfile.h"
-
-1588063814 source:c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\svgfile.cpp
-	"svgfile.h"
-	<iostream>
-	<sstream>
-
-1588065220 source:c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\graphe.cpp
-	"Graphe.h"
-	<iostream>
-	<fstream>
-	<vector>
-	<string>
-	<queue>
-
-1588065220 c:\users\grego\bureau\ece paris\ingé 2\théoriegraphes\piscine1\graphe.h
-	<vector>
-	"Sommet.h"
-	"Arete.h"
-	"svgfile.h"
-
-1588063833 source:c:\users\grego\documents\github\projet-piscine-2020\arete.cpp
-	"Arete.h"
-	<fstream>
-	<iostream>
-
-1588063833 c:\users\grego\documents\github\projet-piscine-2020\arete.h
-	<fstream>
-	"svgfile.h"
-
-1588063814 c:\users\grego\documents\github\projet-piscine-2020\svgfile.h
-	<string>
-	<fstream>
-	<set>
-
-1588068971 source:c:\users\grego\documents\github\projet-piscine-2020\graphe.cpp
-	"Graphe.h"
-	<iostream>
-	<fstream>
-	<vector>
-	<string>
-	<queue>
-
-1588068971 c:\users\grego\documents\github\projet-piscine-2020\graphe.h
-	<vector>
-	"Sommet.h"
-	"Arete.h"
-	"svgfile.h"
-
-1588063833 c:\users\grego\documents\github\projet-piscine-2020\sommet.h
-	<vector>
-	<fstream>
-	"svgfile.h"
-
-1588063833 source:c:\users\grego\documents\github\projet-piscine-2020\sommet.cpp
-	"Sommet.h"
-	<vector>
-	<iostream>
-	<fstream>
-
-1588063814 source:c:\users\grego\documents\github\projet-piscine-2020\svgfile.cpp
-	"svgfile.h"
-	<iostream>
-	<sstream>
-
-1588070687 source:c:\users\grego\documents\github\projet-piscine-2020\main.cpp
-	<iostream>
-	"Graphe.h"
-	"Svgfile.h"
-	<string>
-
 1588031432 source:c:\users\alice cbx\documents\projet piscine\projet-piscine\arete.cpp
 	"Arete.h"
 	<fstream>
@@ -174,15 +13,13 @@
 	<fstream>
 	<set>
 
-1588149578 source:c:\users\alice cbx\documents\projet piscine\projet-piscine\graphe.cpp
-	"Graphe.h"
+1588153718 source:c:\users\alice cbx\documents\projet piscine\projet-piscine\main.cpp
 	<iostream>
-	<fstream>
-	<vector>
+	"Graphe.h"
+	"Svgfile.h"
 	<string>
-	<queue>
 
-1588150179 c:\users\alice cbx\documents\projet piscine\projet-piscine\graphe.h
+1588154336 c:\users\alice cbx\documents\projet piscine\projet-piscine\graphe.h
 	<vector>
 	"Sommet.h"
 	"Arete.h"
@@ -204,9 +41,12 @@
 	<iostream>
 	<sstream>
 
-1588150179 source:c:\users\alice cbx\documents\projet piscine\projet-piscine\main.cpp
-	<iostream>
+1588152727 source:c:\users\alice cbx\documents\projet piscine\projet-piscine\graphe.cpp
 	"Graphe.h"
-	"Svgfile.h"
+	<iostream>
+	<fstream>
+	<vector>
 	<string>
+	<queue>
+	<cmath>
 

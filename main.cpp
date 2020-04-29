@@ -96,30 +96,33 @@ void menu()             //menu
         case 3:
         {
             std::cout <<"Centralité degre:"<< std::endl;
-            g.calculCentraliteDegre();
+            //g.calculCentraliteDegre();
             g.sauvegarde();
 
             std::cout <<"Centralité VP:"<< std::endl;
-            g.calculCentraliteVP();
+            //g.calculCentraliteVP();
             g.sauvegarde();
 
             std::cout <<"Centralité proximite:"<< std::endl;
             g.proximite(choix2,g);
-
+            std::cout  << "ok5"<< std::endl;
         }
         break;
 
-    case 4:
-        std::cout << "4_OK" << std::endl;
+        case 4:
+            std::cout << "4_OK" << std::endl;
+            break;
+
+        case 5:
+        {
+            fin = 1;
+        }
+
         break;
 
-    case 5:
-        fin = 1;
-        break;
-
+        }
     }
-}
-while(fin != 1);
+    while(fin != 1);
 }
 
 

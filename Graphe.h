@@ -12,8 +12,8 @@ private:
     std::vector<Sommet*> m_sommets;
     std::vector<Arete*> m_aretes;
     int m_orient;
-    std::vector<int> m_nbchemin;
-    int m_nb;
+    //std::vector<int> m_nbchemin;
+    //int m_nb;
 
 public:
     Graphe(std::string nomFichiertopo,std::string nomFichierpond);      //constructeur

@@ -163,36 +163,36 @@ std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKS
 
     std::pair<const Sommet*,double> p;
 
-        while(!file.empty())
+    while(!file.empty())
+    {
+        ///on marque le sommet s avec le plus petit poids
+        p = file.top();
+        file.pop();
+
+        ///pour chaque successeur du sommet défilé
+        while((!file.empty())&&(couleurs[p.first->getID()] ==1))
         {
-            ///on marque le sommet s avec le plus petit poids
-            p = file.top();
+            p=file.top();
             file.pop();
+        }
+        couleurs[p.first->getID()]=1;          //on marque le sommet
 
-            ///pour chaque successeur du sommet défilé
-            while((!file.empty())&&(couleurs[p.first->getID()] ==1))
+        for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
+        {
+            if(couleurs[succ.first->getID()] == 0) ///si non marqué
             {
-                p=file.top();
-                file.pop();
-            }
-            couleurs[p.first->getID()]=1;          //on marque le sommet
-
-            for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
-            {
-                if(couleurs[succ.first->getID()] == 0) ///si non marqué
+                if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
                 {
-                    if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
-                    {
-                        poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
-                        preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
-                        file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
-                    }
+                    poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
+                    preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
+                    file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
                 }
             }
         }
-
-     return preds;
     }
+
+    return preds;
+}
 
 /*
 sous-programme qui affiche une arborescence
@@ -201,18 +201,17 @@ params : sommet initial (racine), vecteur de prédécesseur
 int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
 {
     int somme=0;
-    std::cout<<"parcours"<<std::endl;
     if(arbre[num2]!=-1)
     {
-        std::cout<<num2<<" <-- ";
+        //std::cout<<num2<<" <-- ";
         size_t j=arbre[num2];
 
         while(j!=num1)
         {
-            std::cout<<j<<" <-- ";
+            //std::cout<<j<<" <-- ";
             j=arbre[j];
         }
-        std::cout<<j<<std::endl;
+        //std::cout<<j<<std::endl;
 
         size_t a=num2;
 
@@ -223,20 +222,13 @@ int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& 
             {
                 if(succ.first->getID()==a)
                 {
-                    std::cout << succ.second << " + ";
+                    //std::cout << succ.second << " + ";
                     somme = somme + succ.second;
                 }
-
             }
             a=arbre[a];
         }
-
-        std::cout << "somme : " << somme<<std::endl;
-
     }
-    m_nb=m_nb+1;
-    //m_nbchemin.push_back(nbchemin);
-    //std::cout<<"nb chemin : "<<nbchemin<<std::endl;
     return somme;
 }
 
@@ -294,23 +286,23 @@ int Graphe::afficher_parcours1(size_t num,const std::vector<int>& arbre)
         {
             if(arbre[i]!=-1)
             {
-                std::cout<<i<<" <-- ";
+                //std::cout<<i<<" <-- ";
                 size_t j=arbre[i];
                 somme=somme+1;
                 while(j!=num)
                 {
-                    std::cout<<j<<" <-- ";
+                    //std::cout<<j<<" <-- ";
                     j=arbre[j];
                     somme=somme+1;
                 }
-                std::cout<<j<<std::endl;
+                //std::cout<<j<<std::endl;
             }
 
         }
         nbchemin=nbchemin+1;
     }
-    std::cout<<"nb : "<<nbchemin<<std::endl;
-    m_nbchemin.push_back(nbchemin);
+    //std::cout<<"nb : "<<nbchemin<<std::endl;
+    //m_nbchemin.push_back(nbchemin);
 
     return somme;
 }
@@ -342,19 +334,22 @@ void Graphe::proximite(std::string choix2, Graphe g)
         for(id1=0; id1<m_sommets.size() ; ++id1)
         {
             total=0;
-            m_nb=0;
+            //m_nb=0;
             for(id2=0; id2<m_sommets.size(); ++id2)
             {
 
                 std::vector<int> arbre = g.rechercheDijkstra(id1);
-                if(id1!=id2)
-                    m_nb++;
+                //if(id1!=id2)
+                   // m_nb++;
                 total= total+g.afficher_parcours(id1,id2,arbre);
+                std::cout  << "ok1"<< std::endl;
             }
-            m_nbchemin.push_back(m_nb);
+            //m_nbchemin.push_back(m_nb);
             std::cout  << "Total :"<<total<< std::endl;
             resultat.push_back(total);
+            std::cout  << "ok2"<< std::endl;
         }
+                std::cout  << "okentre les deux"<< std::endl;
 
     }
     else
@@ -369,7 +364,7 @@ void Graphe::proximite(std::string choix2, Graphe g)
             ///affichage des chemins obtenus
             std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
             total=total+g.afficher_parcours1(id1,arbre_BFS);
-            std::cout  << "Total : "<<total<< std::endl;
+            //std::cout  << "Total : "<<total<< std::endl;
             //std::cout  << "m_nbchemin :"<<m_nbchemin[id1] << std::endl;
             resultat.push_back(total);
             total=0;
@@ -379,8 +374,10 @@ void Graphe::proximite(std::string choix2, Graphe g)
     for(size_t i=0; i<resultat.size(); ++i )
     {
         std::cout <<"Indice normalise "<<i<<":"<<3/resultat[i]<<std::endl;
-        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/m_nbchemin[i]<<std::endl;
+        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/(m_sommets.size()-1) <<std::endl;
+        std::cout  << "POk 3"<< std::endl;
     }
+    std::cout  << "ok 4"<< std::endl;
 
 }
 
