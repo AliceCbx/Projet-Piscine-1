@@ -340,16 +340,13 @@ void Graphe::proximite(std::string choix2, Graphe g)
 
                 std::vector<int> arbre = g.rechercheDijkstra(id1);
                 //if(id1!=id2)
-                   // m_nb++;
+                // m_nb++;
                 total= total+g.afficher_parcours(id1,id2,arbre);
-                std::cout  << "ok1"<< std::endl;
             }
             //m_nbchemin.push_back(m_nb);
             std::cout  << "Total :"<<total<< std::endl;
             resultat.push_back(total);
-            std::cout  << "ok2"<< std::endl;
         }
-                std::cout  << "okentre les deux"<< std::endl;
 
     }
     else
@@ -360,31 +357,24 @@ void Graphe::proximite(std::string choix2, Graphe g)
         {
 
 ///appel de la méthode BFS et récupération du résultat
-std::vector<int> arbre_BFS = g.BFS(id1);
+            std::vector<int> arbre_BFS = g.BFS(id1);
 ///affichage des chemins obtenus
-std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
-total=total+g.afficher_parcours1(id1,arbre_BFS);
-//std::cout  << "Total : "<<total<< std::endl;
-//std::cout  << "m_nbchemin :"<<m_nbchemin[id1] << std::endl;
-resultat.push_back(total);
-total=0;
-       }
+            std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
+            total=total+g.afficher_parcours1(id1,arbre_BFS);
+            resultat.push_back(total);
+            total=0;
+        }
     }
-
     for(size_t i=0; i<resultat.size(); ++i )
     {
+        // somme totale des poids des chemins,
+        //le tout divisé par le nombre possible de chemin.
+        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/(m_sommets.size()-1) <<std::endl;
 
-    // somme totale des poids des chemins,
-    //le tout divisé par le nombre possible de chemin.
-    std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/(m_sommets.size()-1) <<std::endl;
-
-    //L'inverse du résultat multiplié par le nombre de chemin possible.
-    std::cout <<"Indice normalise "<<i<<":"<<(resultat.size()-1)/resultat[i]<<std::endl;
-    std::cout  << " " << std::endl;
+        //L'inverse du résultat multiplié par le nombre de chemin possible.
+        std::cout <<"Indice normalise "<<i<<":"<<(resultat.size()-1)/resultat[i]<<std::endl;
+        std::cout  << " " << std::endl;
     }
-
-   // std::cout  << "ok 4"<< std::endl;
-
 }
 
 void Graphe::sauvegarde()     const      //sauvegarde les indices dans un fichier texte
@@ -429,33 +419,41 @@ void Graphe::calculCentraliteDegre()            //calcul de la centralité de deg
 
 void Graphe::calculCentraliteVP()
 {
-    double idC;
-
+    double idC,indiceNN,indiceN;
+    std::vector<double> indiceV;
+    double lambda=0, sommeInd=0;
+    int test = 0,compt=0;
     for(size_t i=0; i<m_sommets.size(); ++i)
     {
-        m_sommets[i]->set_idC( idC = 1 );
+        m_sommets[i]->set_idC( idC = 1 ); //on attribue pour chaque sommet l'indice 1 indice
+        V.push_back(m_sommets[i]->get_idC());
     }
-
-    double lambda=0, sommeInd, test = 0;
-
     do
     {
-        for(size_t j=0; j<m_sommets.size(); ++j)
+        for(auto it : m_sommets) //pour chaque sommet
         {
-            test = test + m_sommets[j]->getSuccesseurs().size();
+            for(auto iit : it->getSuccesseurs()) //pour chaque successeur de chaque sommet
+            {
+                indiceV[compt] = indiceV[compt] + iit.first->get_idC() ; //on calcule l'indice des voisins
+            }
+            ++compt;
         }
-
-        sommeInd = test * test;
+        for(size_t i=0; i<indiceV.size(); ++i)
+        {
+            sommeInd = sommeInd + (indiceV[i] * indiceV[i]); //on calcule lambda
+        }
         lambda = sqrt(sommeInd);
-
-        for(size_t k=0; k<m_sommets.size(); ++k)
+        for(size_t k=0; k<m_sommets.size(); ++k) //pour chaque sommet on recalcule l'indice
         {
-            m_sommets[k]->set_idC( idC = (test/lambda) );
+            indiceNN = (indiceV[k] / lambda); //indice non normalisé
+            m_sommets[k]->set_idC( idC = indiceNN);
+            indiceN = indiceNN *1; //indice normalisé
+            m_sommets[k]->ajouterIndice(std::make_pair(indiceNN,indiceN));
         }
-
-        std::cout << lambda << std::endl;
+        test = abs(1 - lambda);
     }
-    while (lambda == 5);
+    while (test > lambda);   //on fait ça tant que lambda ne varie pas trop
 }
+
 
 

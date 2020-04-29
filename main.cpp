@@ -105,7 +105,6 @@ void menu()             //menu
 
             std::cout <<"Centralité proximite:"<< std::endl;
             g.proximite(choix2,g);
-            std::cout  << "ok5"<< std::endl;
         }
         break;
 
