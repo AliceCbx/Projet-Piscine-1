@@ -1,9 +1,5 @@
-Sommet : 0 IndiceNN : 0.0555556 IndiceN : 0.444444
-Sommet : 1 IndiceNN : 0.0666667 IndiceN : 0.533333
-Sommet : 2 IndiceNN : 0.0666667 IndiceN : 0.533333
-Sommet : 3 IndiceNN : 0.0833333 IndiceN : 0.666667
-Sommet : 4 IndiceNN : 0.0666667 IndiceN : 0.533333
-Sommet : 5 IndiceNN : 0.0555556 IndiceN : 0.444444
-Sommet : 6 IndiceNN : 0.0666667 IndiceN : 0.533333
-Sommet : 7 IndiceNN : 0.0555556 IndiceN : 0.444444
-Sommet : 8 IndiceNN : 0.0555556 IndiceN : 0.444444
+Sommet : 0 IndiceNN : 0.142857 IndiceN : 0.571429
+Sommet : 1 IndiceNN : 0.142857 IndiceN : 0.571429
+Sommet : 2 IndiceNN : 0.25 IndiceN : 1
+Sommet : 3 IndiceNN : 0.142857 IndiceN : 0.571429
+Sommet : 4 IndiceNN : 0.142857 IndiceN : 0.571429
