@@ -33,8 +33,8 @@ void menu()             //menu
 
         if((nom == "vide")&&(nom2 == "vide"))                    //vérification chargement de fichiers
         {
-            std::cout << "Il n'y a pas de graphe deja charge\n"
-                      "Veuillez en charger un avant toutes actions\n\n"
+            std::cout << //"Il n'y a pas de graphe deja charge\n"
+                      //"Veuillez en charger un avant toutes actions\n\n"
                       "Veuillez choisir le nom du fichier (topologie) en .txt " << std::endl;
 
             std::cin >> nom;
@@ -95,33 +95,32 @@ void menu()             //menu
 
         case 3:
         {
-            std::cout <<"Centralité degre:"<< std::endl;
+           /* std::cout <<"Centralité degre:"<< std::endl;
             g.calculCentraliteDegre();
             g.sauvegarde();
 
             std::cout <<"Centralité VP:"<< std::endl;
             g.calculCentraliteVP();
-            g.sauvegarde();
+            g.sauvegarde();*/
 
             std::cout <<"Centralité proximite:"<< std::endl;
             g.proximite(choix2,g);
+            g.sauvegarde();
+
         }
         break;
 
-        case 4:
-            std::cout << "4_OK" << std::endl;
-            break;
-
-        case 5:
-        {
-            fin = 1;
-        }
-
+    case 4:
+        std::cout << "4_OK" << std::endl;
         break;
 
-        }
+    case 5:
+        fin = 1;
+        break;
+
     }
-    while(fin != 1);
+}
+while(fin != 1);
 }
 
 
