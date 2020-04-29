@@ -13,6 +13,7 @@ private:
     std::vector<Arete*> m_aretes;
     int m_orient;
     std::vector<int> m_nbchemin;
+    int m_nb;
 
 public:
     Graphe(std::string nomFichiertopo,std::string nomFichierpond);      //constructeur
@@ -30,6 +31,18 @@ public:
 
     //Bfs
     std::vector<int> BFS(int num_s0)const;
+
+
+    //sauvegarde
+    void sauvegarde()     const;
+
+    //degre
+    void calculCentraliteDegre();
+    //VP
+    void calculCentraliteVP();
+
+
+
 
 };
 

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <queue>
+#include <cmath>
 
 Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)              //constructeur
 {
@@ -162,35 +163,36 @@ std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKS
 
     std::pair<const Sommet*,double> p;
 
-    while(!file.empty())
-    {
-        ///on marque le sommet s avec le plus petit poids
-        p = file.top();
-        file.pop();
-
-        ///pour chaque successeur du sommet défilé
-        while((!file.empty())&&(couleurs[p.first->getID()] ==1))
+        while(!file.empty())
         {
-            p=file.top();
+            ///on marque le sommet s avec le plus petit poids
+            p = file.top();
             file.pop();
-        }
-        couleurs[p.first->getID()]=1;          //on marque le sommet
 
-        for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
-        {
-            if(couleurs[succ.first->getID()] == 0) ///si non marqué
+            ///pour chaque successeur du sommet défilé
+            while((!file.empty())&&(couleurs[p.first->getID()] ==1))
             {
-                if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
+                p=file.top();
+                file.pop();
+            }
+            couleurs[p.first->getID()]=1;          //on marque le sommet
+
+            for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
+            {
+                if(couleurs[succ.first->getID()] == 0) ///si non marqué
                 {
-                    poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
-                    preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
-                    file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
+                    if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
+                    {
+                        poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
+                        preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
+                        file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
+                    }
                 }
             }
         }
+
+     return preds;
     }
-    return preds;
-}
 
 /*
 sous-programme qui affiche une arborescence
@@ -198,7 +200,6 @@ params : sommet initial (racine), vecteur de prédécesseur
 */
 int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
 {
-    int nbchemin=0;
     int somme=0;
     std::cout<<"parcours"<<std::endl;
     if(arbre[num2]!=-1)
@@ -210,7 +211,6 @@ int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& 
         {
             std::cout<<j<<" <-- ";
             j=arbre[j];
-            nbchemin=nbchemin+1;
         }
         std::cout<<j<<std::endl;
 
@@ -226,13 +226,17 @@ int Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& 
                     std::cout << succ.second << " + ";
                     somme = somme + succ.second;
                 }
+
             }
             a=arbre[a];
         }
-        m_nbchemin.push_back(nbchemin);
+
         std::cout << "somme : " << somme<<std::endl;
+
     }
-    std::cout<<"nb chemin : "<<nbchemin<<std::endl;
+    m_nb=m_nb+1;
+    //m_nbchemin.push_back(nbchemin);
+    //std::cout<<"nb chemin : "<<nbchemin<<std::endl;
     return somme;
 }
 
@@ -333,31 +337,40 @@ void Graphe::proximite(std::string choix2, Graphe g)
     //double boucle pour avoir la somme des longueurs des pcc passant de id1 à tous les autres sommets
     if (choix2 == "OUI_P")
     {
+
+        std::cout << std::endl << "PCC avec dji:"<< std::endl;
         for(id1=0; id1<m_sommets.size() ; ++id1)
         {
             total=0;
+            m_nb=0;
             for(id2=0; id2<m_sommets.size(); ++id2)
             {
-                std::cout << std::endl << "PCC avec dji:"<< std::endl;
+
                 std::vector<int> arbre = g.rechercheDijkstra(id1);
+                if(id1!=id2)
+                    m_nb++;
                 total= total+g.afficher_parcours(id1,id2,arbre);
             }
+            m_nbchemin.push_back(m_nb);
             std::cout  << "Total :"<<total<< std::endl;
             resultat.push_back(total);
         }
+
     }
     else
     {
+        ///affichage du plus court chemin
+        std::cout << std::endl << "PCC avec BFS";
         for(id1=0; id1<m_sommets.size() ; ++id1)
         {
-            ///affichage du plus court chemin
-            std::cout << std::endl << "PCC avec BFS";
+
             ///appel de la méthode BFS et récupération du résultat
             std::vector<int> arbre_BFS = g.BFS(id1);
             ///affichage des chemins obtenus
             std::cout << "parcours BFS a partir du sommet " << id1 << " :\n";
             total=total+g.afficher_parcours1(id1,arbre_BFS);
             std::cout  << "Total : "<<total<< std::endl;
+            //std::cout  << "m_nbchemin :"<<m_nbchemin[id1] << std::endl;
             resultat.push_back(total);
             total=0;
         }
@@ -366,7 +379,79 @@ void Graphe::proximite(std::string choix2, Graphe g)
     for(size_t i=0; i<resultat.size(); ++i )
     {
         std::cout <<"Indice normalise "<<i<<":"<<3/resultat[i]<<std::endl;
-        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/g.m_nbchemin[i]<<std::endl;
+        std::cout<<"Indice non normalise "<<i<<":"<<resultat[i]/m_nbchemin[i]<<std::endl;
     }
 
 }
+
+void Graphe::sauvegarde()     const      //sauvegarde les indices dans un fichier texte
+{
+    std::ofstream ofs{"sauvegarde.txt"};
+    if (!ofs)
+        std::cout<<"pb d'ouverture ou nom du fichier\n";
+
+    for(auto s : m_sommets)
+    {
+        ofs << "Sommet : " << s->getID() ;
+
+        for(const auto p : s->getIndices() )
+        {
+            ofs << " IndiceNN : " << p.first << " IndiceN : " << p.second << std::endl;
+        }
+    }
+}
+
+void Graphe::calculCentraliteDegre()            //calcul de la centralité de degré
+{
+    double test=0;
+    double idC;
+
+    for(size_t i=0; i<m_sommets.size(); ++i)
+    {
+        m_sommets[i]->set_idC( idC = 0 );
+        m_sommets[i]->set_idC( idC = m_sommets[i]->getSuccesseurs().size() );           //chaque indice correspond au nombre de successeurs
+
+        std::cout << "Indice (non normalise) sommet " << m_sommets[i]->getID() << ": " << m_sommets[i]->get_idC()  << std::endl;
+        std::cout << "Indice (normalise) sommet " << m_sommets[i]->getID() << ": " << m_sommets[i]->get_idC()  / (m_sommets.size() - 1) << std::endl << std::endl;
+
+        m_sommets[i]->ajouterIndice(std::make_pair(m_sommets[i]->get_idC(),(m_sommets[i]->get_idC()/(m_sommets.size() - 1))));
+
+        if( test < m_sommets[i]->get_idC() )            //on teste pour savoir quel indice est le plus élevé
+        {
+            test = m_sommets[i]->get_idC() ;
+        }
+    }
+    std::cout << "indice centralite degre maximal  : " << test << std::endl;            //affichage de l'indice le plus élevé
+}
+
+void Graphe::calculCentraliteVP()
+{
+    double idC;
+
+    for(size_t i=0; i<m_sommets.size(); ++i)
+    {
+        m_sommets[i]->set_idC( idC = 1 );
+    }
+
+    double lambda=0, sommeInd, test = 0;
+
+    do
+    {
+        for(size_t j=0; j<m_sommets.size(); ++j)
+        {
+            test = test + m_sommets[j]->getSuccesseurs().size();
+        }
+
+        sommeInd = test * test;
+        lambda = sqrt(sommeInd);
+
+        for(size_t k=0; k<m_sommets.size(); ++k)
+        {
+            m_sommets[k]->set_idC( idC = (test/lambda) );
+        }
+
+        std::cout << lambda << std::endl;
+    }
+    while (lambda == 5);
+}
+
